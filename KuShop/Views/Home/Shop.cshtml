@@ -1,0 +1,71 @@
+﻿@model IEnumerable<KuShop.ViewModels.PdVM>
+@{
+    //สามารถเขียนคำสั่งด้วย c# ได้
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if(TempData["SuccessMessage"]!= null)
+{
+    <div class="alert alert-warning">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<h1 class="text-success display-4">KuShop</h1>
+
+@{
+    //รับค่าจาก ViewBag ที่ส่งมาจาก Controller
+    var stext = ViewBag.stext;
+}
+
+
+<form asp-controller="Home" asp-action="Shop">
+    <div class="row">
+        <div class="col-sm-6 col-md-8 col-lg-9">
+
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="input-group">
+                <span class="input-group-text">ค้นหา</span>
+                <input type="text" name="stext" class="form-control" value="@stext" />
+                <button type="submit" class="btn btn-secondary">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row mt-3">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <!--Copy ส่วน Card มาจาก Getbootstrap-->
+            <div class="card p-2 shadow-sm" >
+                @{
+                    //กำหนดตำแหน่งเก็บรูป ต้องสร้าง Folder เก็บรูปที่ /wwwroot/imgpd
+                    var pdimg = "/imgpd/" + item.PdId + ".jpg";
+                }
+                <img src="@pdimg" class="p-3" >
+                <div class="card-body bg-info bg-opacity-10">
+                    <h5 class="card-title">@item.PdName</h5>
+                    <p class="card-subtitle text-muted">@item.DevName</p>
+                    <a class="btn btn-link" 
+                        asp-controller="Product" asp-action="show" asp-route-id="@item.PdId">
+                        รายละเอียด
+                    </a>
+                    <a asp-controller="Cart" asp-action="AddDtl" asp-route-pdid="@item.PdId" 
+                        class="text-danger  float-end" >
+                        <i class="bi bi-cart-plus-fill lead"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
